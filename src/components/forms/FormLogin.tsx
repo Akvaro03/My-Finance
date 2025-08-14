@@ -7,13 +7,13 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "./ui/card";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
+} from "../ui/card";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
-function FormLogin() {
+function FormLogin({ goToSign }: { goToSign?: () => void }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -121,12 +121,12 @@ function FormLogin() {
 
         {/* Footer Links */}
         <div className="mt-6 text-center space-y-2">
-          <button className="text-blue-400 hover:text-blue-300 text-sm transition-colors">
+          {/* <button className="text-blue-400 hover:text-blue-300 text-sm transition-colors">
             Forgot your password?
-          </button>
+          </button> */}
           <p className="text-slate-500 text-sm">
             Dont have an account?{" "}
-            <button className="text-blue-400 hover:text-blue-300 transition-colors">
+            <button onClick={goToSign} className="text-blue-400 hover:text-blue-300 transition-colors">
               Sign up
             </button>
           </p>

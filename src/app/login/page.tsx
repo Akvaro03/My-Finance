@@ -1,8 +1,14 @@
-import FormLogin from "@/components/FormLogin";
-import { DollarSign } from "lucide-react";
-import Image from "next/image";
+"use client";
+
+import FormLogin from "@/components/forms/FormLogin";
+import FormSign from "@/components/forms/FormSign";
+import { useState } from "react";
 
 export default function Page() {
+  const [state, setState] = useState<"login" | "sign">("login");
+  const switchState = () => {
+    setState(state === "login" ? "sign" : "login");
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
       {/* Background decoration */}
@@ -17,7 +23,11 @@ export default function Page() {
           <h1 className="text-3xl font-bold text-white mb-2">My Finance</h1>
           <p className="text-slate-400">Your financial journey starts here</p>
         </div>
-        <FormLogin />
+        {state === "login" ? (
+          <FormLogin goToSign={switchState} />
+        ) : (
+          <FormSign goToLogin={switchState} />
+        )}
       </div>
     </div>
   );
