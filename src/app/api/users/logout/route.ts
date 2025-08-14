@@ -8,7 +8,7 @@ export async function POST(req: Request) {
   response.cookies.set({
     name: "myFinance-User",
     value: "",         // valor vacío
-    path: "/",         // misma ruta que cuando la creaste
+    path: "/",           // misma ruta que cuando la creaste
     maxAge: 0,         // expira inmediatamente
     httpOnly: true,    // protege la cookie
     secure: process.env.NODE_ENV === "production",
