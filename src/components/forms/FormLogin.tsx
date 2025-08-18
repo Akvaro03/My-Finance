@@ -12,6 +12,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
+import { logIn } from "@/services/authService";
 
 function FormLogin({ goToSign }: { goToSign?: () => void }) {
   const [email, setEmail] = useState("");
@@ -24,17 +25,15 @@ function FormLogin({ goToSign }: { goToSign?: () => void }) {
     e.preventDefault();
     setIsLoading(true);
     setError("");
-
-    // Simulate login process
-    setTimeout(() => {
-      if (email === "demo@myfinance.com" && password === "demo123") {
-        // Success - redirect would happen here
-        console.log("Login successful");
-      } else {
-        setError("Incorrect email or password. Please try again.");
-      }
-      setIsLoading(false);
-    }, 2000);
+    try {
+      await logIn({ email, password });
+      setError("");
+    } catch (e) {
+      setError(
+        e ? String(e) : "An unexpected error occurred. Please try again later."
+      );
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -126,7 +125,10 @@ function FormLogin({ goToSign }: { goToSign?: () => void }) {
           </button> */}
           <p className="text-slate-500 text-sm">
             Dont have an account?{" "}
-            <button onClick={goToSign} className="text-blue-400 hover:text-blue-300 transition-colors">
+            <button
+              onClick={goToSign}
+              className="text-blue-400 hover:text-blue-300 transition-colors"
+            >
               Sign up
             </button>
           </p>

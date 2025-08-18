@@ -13,7 +13,6 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { signUp } from "@/services/authService";
-import { set } from "zod";
 
 function FormSign({ goToLogin }: { goToLogin?: () => void }) {
   const [email, setEmail] = useState("");
@@ -26,16 +25,16 @@ function FormSign({ goToLogin }: { goToLogin?: () => void }) {
     e.preventDefault();
     setIsLoading(true);
     setError("");
-    try {
-      const response = await signUp({ email, password });
-      console.log(response);
-      setError("")
-    } catch (e) {
-      setError(
-        e ? String(e) : "An unexpected error occurred. Please try again later."
-      );
-    }
-    setIsLoading(false);
+      try {
+        const response = await signUp({ email, password });
+        console.log(response);
+        setError("")
+      } catch (e) {
+        setError(
+          e ? String(e) : "An unexpected error occurred. Please try again later."
+        );
+      }
+      setIsLoading(false);
   };
 
   return (
