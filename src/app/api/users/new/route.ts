@@ -1,4 +1,4 @@
-import { hashPassword } from "@/utils/encrypt";
+import { generateJwtUser, hashPassword } from "@/utils/encrypt";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     const response = NextResponse.json({ user: newUser });
     response.cookies.set({
       name: "myFinance-User",
-      value: "500",
+      value: generateJwtUser(newUser.id, newUser.email || ""),
       httpOnly: true, // protege de acceso desde JS
       secure: process.env.NODE_ENV === "production", // solo HTTPS en producción
       path: "/", // la cookie es accesible desde toda la app
@@ -35,9 +35,16 @@ export async function POST(req: Request) {
     });
 
     return response;
-  } catch (e: any) {
+  } catch (e: unknown) {
     // Manejo específico de Prisma
-    if (e?.name === "PrismaClientKnownRequestError" && e.code === "P2002") {
+    if (
+      typeof e === "object" &&
+      e !== null &&
+      "name" in e &&
+      "code" in e &&
+      (e as { name?: string; code?: string }).name === "PrismaClientKnownRequestError" &&
+      (e as { name?: string; code?: string }).code === "P2002"
+    ) {
       return NextResponse.json(
         { error: "A user with this email already exists." },
         { status: 409 }

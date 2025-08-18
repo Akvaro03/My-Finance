@@ -20,6 +20,11 @@ export default function Header(
     monthlyExpenses: 3180.25,
   };
 
+  const handleLogout = () => {
+    fetch("/api/users/logout", {
+      method: "POST",
+    });
+  };
   return (
     <header
       className={cn(
@@ -28,7 +33,6 @@ export default function Header(
       )}
     >
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        
         {/* Logo / Título */}
         <Link
           href="/"
@@ -39,25 +43,33 @@ export default function Header(
           </span>
           <span className="text-zinc-100">Finance</span>
         </Link>
-
-        {/* User Info */}
-        <div className="flex items-center gap-4">
-          <div className="hidden md:block text-right">
-            <p className="text-white font-medium">{user.name}</p>
-            <p className="text-slate-400 text-sm">{user.email}</p>
+        <div className="flex items-center gap-1 tracking-wide text-2xl transition-all">
+          <Button
+            variant="link"
+            className="text-zinc-200"
+            aria-label="Abrir navegación"
+            onClick={handleLogout}
+          >
+            Logout
+          </Button>
+          <div className="flex items-center gap-4">
+            <div className="hidden md:block text-right">
+              <p className="text-white font-medium">{user.name}</p>
+              <p className="text-slate-400 text-sm">{user.email}</p>
+            </div>
+            <Avatar className="w-10 h-10">
+              <AvatarImage
+                src={user.avatar || "/placeholder.svg"}
+                alt={user.name}
+              />
+              <AvatarFallback className="bg-blue-600 text-white">
+                {user.name
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
+              </AvatarFallback>
+            </Avatar>
           </div>
-          <Avatar className="w-10 h-10">
-            <AvatarImage
-              src={user.avatar || "/placeholder.svg"}
-              alt={user.name}
-            />
-            <AvatarFallback className="bg-blue-600 text-white">
-              {user.name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
-            </AvatarFallback>
-          </Avatar>
         </div>
 
         {/* Mobile Menu Button */}

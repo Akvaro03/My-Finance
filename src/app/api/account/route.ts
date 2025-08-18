@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
+import { getJwtUser } from "@/utils/encrypt";
 
 const createAccountSchema = z.object({
   user_id: z.number().int().positive(),
@@ -10,23 +11,14 @@ const createAccountSchema = z.object({
 });
 
 export async function GET(req: Request) {
-  const url = new URL(req.url);
-  const userIdParam = url.searchParams.get("user_id");
+  const user = getJwtUser(req);
 
-  if (!userIdParam) {
-    return NextResponse.json(
-      { error: "user_id is required as query parameter" },
-      { status: 400 }
-    );
-  }
-
-  const user_id = Number(userIdParam);
-  if (isNaN(user_id) || user_id <= 0) {
+  if (!user || isNaN(user.id) || user.id <= 0) {
     return NextResponse.json({ error: "Invalid user_id" }, { status: 400 });
   }
 
   const accounts = await prisma.accounts.findMany({
-    where: { user_id },
+    where: { user_id: user.id },
     orderBy: { name: "asc" },
   });
 
