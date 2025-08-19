@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import Header from "@/components/header";
 import { FloatingComponent } from "@/components/floatingComponent";
+import FormTransaction from "@/components/forms/FormTransaction";
 
 export default function DashboardPage() {
   const [showBalance, setShowBalance] = useState(true);
@@ -148,11 +149,14 @@ export default function DashboardPage() {
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <Button onClick={toggleTransactionForm} className="h-16 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 text-white justify-start gap-3 transition-all duration-200 hover:scale-[1.02]">
+          <Button
+            onClick={toggleTransactionForm}
+            className="h-16 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 text-white justify-start gap-3 transition-all duration-200 hover:scale-[1.02]"
+          >
             <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
               <Plus className="w-5 h-5 text-red-400" />
             </div>
-            <div className="text-left"> 
+            <div className="text-left">
               <p className="font-medium">Add Expense</p>
               <p className="text-sm text-slate-400">Track your spending</p>
             </div>
@@ -333,7 +337,13 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-      <FloatingComponent title="Nueva Transacción" isOpen={showTransaction} onClose={toggleTransactionForm}/>
+      <FloatingComponent
+        title="Nueva Transacción"
+        isOpen={showTransaction}
+        onClose={toggleTransactionForm}
+      >
+        <FormTransaction />
+      </FloatingComponent>
     </div>
   );
 }

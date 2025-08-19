@@ -3,18 +3,19 @@
 import * as React from "react";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import FormTransaction from "../forms/FormTransaction";
 
 interface FloatingFormProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
+  children?: React.ReactNode;
 }
 
 export function FloatingComponent({
   isOpen,
   onClose,
   title,
+  children 
 }: FloatingFormProps) {
   return (
     <AnimatePresence>
@@ -50,8 +51,7 @@ export function FloatingComponent({
                 <X size={24} />
               </button>
             </div>
-
-            <FormTransaction />
+            {children}
           </motion.div>
         </>
       )}

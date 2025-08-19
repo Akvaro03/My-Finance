@@ -14,7 +14,7 @@ export default function Header(
   const user = {
     name: "Alex Johnson",
     email: "demo@myfinance.com",
-    avatar: "/placeholder-user.png",
+    avatar: undefined,
     balance: 12450.75,
     monthlyIncome: 5200.0,
     monthlyExpenses: 3180.25,
@@ -59,7 +59,7 @@ export default function Header(
             </div>
             <Avatar className="w-10 h-10">
               <AvatarImage
-                src={user.avatar || "/placeholder.svg"}
+                src={user.avatar || undefined}
                 alt={user.name}
               />
               <AvatarFallback className="bg-blue-600 text-white">
@@ -98,7 +98,7 @@ export default function Header(
             </div>
             <Avatar className="w-10 h-10">
               <AvatarImage
-                src={user.avatar || "/placeholder.svg"}
+                src={user.avatar || undefined}
                 alt={user.name}
               />
               <AvatarFallback className="bg-blue-600 text-white">
