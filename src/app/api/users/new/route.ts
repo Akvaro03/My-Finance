@@ -1,6 +1,7 @@
 import { generateJwtUser, hashPassword } from "@/utils/encrypt";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { PrismaErrorHandler } from "@/lib/PrismaErrorHandler";
 
 export async function POST(req: Request) {
   try {
@@ -37,23 +38,6 @@ export async function POST(req: Request) {
     return response;
   } catch (e: unknown) {
     // Manejo específico de Prisma
-    if (
-      typeof e === "object" &&
-      e !== null &&
-      "name" in e &&
-      "code" in e &&
-      (e as { name?: string; code?: string }).name === "PrismaClientKnownRequestError" &&
-      (e as { name?: string; code?: string }).code === "P2002"
-    ) {
-      return NextResponse.json(
-        { error: "A user with this email already exists." },
-        { status: 409 }
-      );
-    }
-
-    return NextResponse.json(
-      { error: "An unexpected error occurred. Please try again later." },
-      { status: 500 }
-    );
+    return PrismaErrorHandler(e);
   }
 }

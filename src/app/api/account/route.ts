@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
 import { getJwtUser } from "@/utils/encrypt";
+import { PrismaErrorHandler } from "@/lib/PrismaErrorHandler";
 
 const createAccountSchema = z.object({
   user_id: z.number().int().positive(),
@@ -26,13 +27,16 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  const user = getJwtUser(req); // Verifica el usuario autenticado
+  if (!user || isNaN(user.id) || user.id <= 0) {
+    return NextResponse.json({ error: "Invalid user_id" }, { status: 400 });
+  }
   try {
     const body = await req.json();
     const data = createAccountSchema.parse(body);
-
     const account = await prisma.accounts.create({
       data: {
-        user_id: data.user_id,
+        user_id: user?.id,
         name: data.name,
         type: data.type,
         balance: data.balance ?? 0,
@@ -41,16 +45,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json(account, { status: 201 });
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Invalid request data", issues: error },
-        { status: 400 }
-      );
-    }
-    console.error(error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return PrismaErrorHandler(error);
   }
 }
