@@ -1,5 +1,4 @@
 import { useState } from "react";
-import useGetAccount from "@/hooks/useGetAccounts";
 import { Card, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -14,6 +13,12 @@ import {
 } from "../ui/select";
 import { FloatingComponent } from "../floatingComponent";
 import FormAccount from "./FormAccount";
+import FormCategory from "./FormCategory";
+import useGetData from "@/hooks/useGetAccounts";
+import { accounts, categories } from "@/generated/prisma";
+import { ToggleGroup } from "@radix-ui/react-toggle-group";
+import { ToggleGroupItem } from "../ui/toggle-group";
+import SelectType from "../selectType";
 // 👉 crearías algo similar para categorías
 const transactionTypes = [
   { value: 1, label: "Income" },
@@ -33,20 +38,42 @@ function FormTransaction() {
   const [error, setError] = useState<string | null>(null);
 
   const [showAddAccount, setShowAddAccount] = useState(false);
+  const [showAddCategory, setShowAddCategory] = useState(false);
+  const { data: accounts, isLoading: isLoadingAccounts } =
+    useGetData<accounts>("/account");
+  const { data: categories, isLoading: isLoadingCategories } =
+    useGetData<categories>("/categories");
 
-  const { accounts, isLoadingAccounts } = useGetAccount();
-
-  const handleSubmit = () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       setIsLoading(true);
       setError(null);
+      console.log(formData);
+      await fetch("/api/transactions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          account_id: parseInt(formData.accountId),
+          category_id: formData.categoryId
+            ? parseInt(formData.categoryId)
+            : null,
+          type: formData.typeId === "1" ? "income" : "expense",
+          amount: parseFloat(formData.amount),
+          notes: formData.notes,
+        }),
+      });
+
+      setIsLoading(false);
     } catch (error: unknown) {
       setError("An error occurred while creating the transaction.");
     }
   };
   const handleFormDataChange = (
     value: string,
-    type: "amount" | "typeId" | "notes" | "accountId"
+    type: "amount" | "typeId" | "notes" | "accountId" | "categoryId"
   ) => {
     setFormData((prev) => ({ ...prev, [type]: value }));
   };
@@ -73,10 +100,14 @@ function FormTransaction() {
                     }
                   />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-slate-800 border border-slate-600 text-white">
                   {accounts && accounts[0] ? (
                     accounts.map((acc) => (
-                      <SelectItem key={acc.id} value={acc.id.toString()}>
+                      <SelectItem
+                        key={acc.id}
+                        value={acc.id.toString()}
+                        className="hover:bg-slate-700 focus:bg-slate-700 focus:text-white"
+                      >
                         {acc.name}
                       </SelectItem>
                     ))
@@ -98,28 +129,52 @@ function FormTransaction() {
               </Button>
             </div>
           </div>
-
-          {/* Categories Field */}
+          {/* Category Field */}
           <div className="space-y-2">
-            <Label htmlFor="category" className="text-slate-300 font-medium">
-              Categories
+            <Label htmlFor="account" className="text-slate-300 font-medium">
+              Category
             </Label>
             <div className="flex gap-2 items-center">
               <Select
-                onValueChange={(value) => handleFormDataChange(value, "typeId")}
-                value={formData.typeId}
+                value={formData.categoryId}
+                onValueChange={(value) =>
+                  handleFormDataChange(value, "categoryId")
+                }
               >
                 <SelectTrigger className="flex-1 bg-slate-800/50 border-slate-600 text-white">
-                  <SelectValue placeholder="Select category" />
+                  <SelectValue
+                    placeholder={
+                      isLoadingCategories ? "Loading..." : "Select Category"
+                    }
+                  />
                 </SelectTrigger>
-                <SelectContent>
-                  {transactionTypes.map((type) => (
-                    <SelectItem key={type.value} value={type.value.toString()}>
-                      {type.label}
+                <SelectContent className="bg-slate-800 border border-slate-600 text-white">
+                  {categories && categories[0] ? (
+                    categories.map((acc) => (
+                      <SelectItem
+                        key={acc.id}
+                        value={acc.id.toString()}
+                        className="hover:bg-slate-700 focus:bg-slate-700 focus:text-white"
+                      >
+                        {acc.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="2" disabled>
+                      No accounts available
                     </SelectItem>
-                  ))}
+                  )}
                 </SelectContent>
               </Select>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                onClick={() => setShowAddCategory(true)}
+                className="border-slate-600 hover:bg-slate-700"
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
             </div>
           </div>
 
@@ -140,6 +195,12 @@ function FormTransaction() {
               required
             />
           </div>
+
+          {/* Type Field */}
+          <SelectType
+            valueSelected={formData.typeId}
+            onChange={(value) => handleFormDataChange(value, "typeId")}
+          />
 
           {/* Notes Field */}
           <div className="space-y-2">
@@ -192,6 +253,13 @@ function FormTransaction() {
         title="Add Account"
       >
         <FormAccount />
+      </FloatingComponent>
+      <FloatingComponent
+        isOpen={showAddCategory}
+        onClose={() => setShowAddCategory(false)}
+        title="Add Category"
+      >
+        <FormCategory />
       </FloatingComponent>
     </Card>
   );

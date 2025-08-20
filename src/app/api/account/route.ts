@@ -5,7 +5,6 @@ import { getJwtUser } from "@/utils/encrypt";
 import { PrismaErrorHandler } from "@/lib/PrismaErrorHandler";
 
 const createAccountSchema = z.object({
-  user_id: z.number().int().positive(),
   name: z.string().min(1),
   type: z.enum(["cash", "bank", "credit_card", "wallet"]),
   balance: z.number().nonnegative().optional(),
@@ -13,7 +12,6 @@ const createAccountSchema = z.object({
 
 export async function GET(req: Request) {
   const user = getJwtUser(req);
-
   if (!user || isNaN(user.id) || user.id <= 0) {
     return NextResponse.json({ error: "Invalid user_id" }, { status: 400 });
   }
@@ -28,6 +26,7 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   const user = getJwtUser(req); // Verifica el usuario autenticado
+
   if (!user || isNaN(user.id) || user.id <= 0) {
     return NextResponse.json({ error: "Invalid user_id" }, { status: 400 });
   }

@@ -13,22 +13,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import SelectType from "../selectType";
 
-const accountTypes = [
-  { value: "cash", label: "Cash" },
-  { value: "bank", label: "Bank" },
-  { value: "credit_card", label: "Credit Card" },
-  { value: "wallet", label: "Wallet" },
+const CategoryTypes = [
+  { value: 1, label: "Income" },
+  { value: 2, label: "Expense" },
 ];
-
-function FormAccount() {
+function FormCategory() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     name: "",
     type: "",
-    balance: "",
+    color: "000000",
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -43,12 +41,12 @@ function FormAccount() {
       setIsLoading(true);
       setError(null);
 
-      const res = await fetch("/api/account", {
+      const res = await fetch("/api/categories", {
         method: "POST",
         body: JSON.stringify({
           name: formData.name,
-          type: formData.type,
-          balance: Number(formData.balance),
+          type: formData.type === "1" ? "income" : "expense",
+          color: "#000000",
         }),
         headers: {
           "Content-Type": "application/json",
@@ -61,7 +59,7 @@ function FormAccount() {
       }
 
       // Reset form al éxito
-      setFormData({ name: "", type: "", balance: "" });
+      setFormData({ name: "", type: "", color: "#000000" });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unexpected error");
     } finally {
@@ -73,30 +71,6 @@ function FormAccount() {
     <Card className="login-card shadow-2xl">
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Type Field */}
-          <div className="space-y-2">
-            <Label htmlFor="type" className="text-slate-300 font-medium">
-              Account Type
-            </Label>
-            <Select
-              value={formData.type}
-              onValueChange={(value) =>
-                setFormData((prev) => ({ ...prev, type: value }))
-              }
-            >
-              <SelectTrigger className="w-full bg-slate-800/50 border-slate-600 text-white">
-                <SelectValue placeholder="Select an account type" />
-              </SelectTrigger>
-              <SelectContent>
-                {accountTypes.map((t) => (
-                  <SelectItem key={t.value} value={t.value}>
-                    {t.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
           {/* Name Field */}
           <div className="space-y-2">
             <Label htmlFor="name" className="text-slate-300 font-medium">
@@ -115,23 +89,29 @@ function FormAccount() {
             />
           </div>
 
-          {/* Balance Field */}
+          {/* Color Field */}
           <div className="space-y-2">
             <Label htmlFor="balance" className="text-slate-300 font-medium">
-              Initial Balance
+              Color
             </Label>
             <Input
               id="balance"
               type="number"
-              value={formData.balance}
+              value={formData.color}
               onChange={(e) =>
-                setFormData((prev) => ({ ...prev, balance: e.target.value }))
+                setFormData((prev) => ({ ...prev, color: e.target.value }))
               }
               placeholder="Enter initial balance"
               min={0}
               className="bg-slate-800/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-blue-500/20 transition-all duration-200 hover:bg-slate-800/70"
             />
           </div>
+          <SelectType
+            valueSelected={formData.type}
+            onChange={(value) =>
+              setFormData((prev) => ({ ...prev, type: value }))
+            }
+          />
 
           {/* Error Message */}
           {error && (
@@ -161,4 +141,4 @@ function FormAccount() {
   );
 }
 
-export default FormAccount;
+export default FormCategory;
