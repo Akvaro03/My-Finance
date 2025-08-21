@@ -37,6 +37,7 @@ export async function POST(req: Request) {
     }
     // 3. Generar JWT y cookie
     const response = NextResponse.json({ user });
+    console.log("JWT_SECRET:", process.env.JWT_SECRET);
 
     response.cookies.set({
       name: "myFinance-User",

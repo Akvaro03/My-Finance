@@ -87,9 +87,13 @@ function FormAccount() {
               <SelectTrigger className="w-full bg-slate-800/50 border-slate-600 text-white">
                 <SelectValue placeholder="Select an account type" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-slate-800 border border-slate-600 text-white">
                 {accountTypes.map((t) => (
-                  <SelectItem key={t.value} value={t.value}>
+                  <SelectItem
+                    key={t.value}
+                    value={t.value}
+                    className="hover:bg-slate-700 focus:bg-slate-700 focus:text-white"
+                  >
                     {t.label}
                   </SelectItem>
                 ))}

@@ -6,19 +6,8 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 import SelectType from "../selectType";
 
-const CategoryTypes = [
-  { value: 1, label: "Income" },
-  { value: 2, label: "Expense" },
-];
 function FormCategory() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

@@ -11,19 +11,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { FloatingComponent } from "../floatingComponent";
 import FormAccount from "./FormAccount";
 import FormCategory from "./FormCategory";
 import useGetData from "@/hooks/useGetAccounts";
 import { accounts, categories } from "@/generated/prisma";
-import { ToggleGroup } from "@radix-ui/react-toggle-group";
-import { ToggleGroupItem } from "../ui/toggle-group";
 import SelectType from "../selectType";
+import PortalComponent from "../PortalComponent";
 // 👉 crearías algo similar para categorías
-const transactionTypes = [
-  { value: 1, label: "Income" },
-  { value: 2, label: "Expense" },
-];
 
 function FormTransaction() {
   const [formData, setFormData] = useState({
@@ -39,10 +33,26 @@ function FormTransaction() {
 
   const [showAddAccount, setShowAddAccount] = useState(false);
   const [showAddCategory, setShowAddCategory] = useState(false);
-  const { data: accounts, isLoading: isLoadingAccounts } =
-    useGetData<accounts>("/account");
-  const { data: categories, isLoading: isLoadingCategories } =
-    useGetData<categories>("/categories");
+  const {
+    data: accounts,
+    isLoading: isLoadingAccounts,
+    refetch: refetchAccounts,
+  } = useGetData<accounts>("/account");
+  const {
+    data: categories,
+    isLoading: isLoadingCategories,
+    refetch: refetchCategories,
+  } = useGetData<categories>("/categories");
+
+  const handleShowAdd = (type: "account" | "category") => {
+    if (type === "account") {
+      setShowAddAccount((showAddAccount) => !showAddAccount);
+    } else if (type === "category") {
+      setShowAddCategory((showAddCategory) => !showAddCategory);
+    }
+    refetchAccounts();
+    refetchCategories();
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -226,7 +236,7 @@ function FormTransaction() {
             </div>
           )}
 
-          {/* Submit Button */}
+          {/* Submit Button   */}
           <Button
             type="submit"
             disabled={isLoading}
@@ -247,20 +257,22 @@ function FormTransaction() {
       </CardContent>
 
       {/* Floating Modals */}
-      <FloatingComponent
-        isOpen={showAddAccount}
-        onClose={() => setShowAddAccount(false)}
-        title="Add Account"
-      >
-        <FormAccount />
-      </FloatingComponent>
-      <FloatingComponent
-        isOpen={showAddCategory}
-        onClose={() => setShowAddCategory(false)}
-        title="Add Category"
-      >
-        <FormCategory />
-      </FloatingComponent>
+      {showAddAccount && (
+        <PortalComponent
+          title="New Account"
+          onClose={() => handleShowAdd("account")} // 👈 se sincroniza con el estado
+        >
+          <FormAccount />
+        </PortalComponent>
+      )}
+      {showAddCategory && (
+        <PortalComponent
+          title="New Category"
+          onClose={() => handleShowAdd("category")} // 👈 idem acá
+        >
+          <FormCategory />
+        </PortalComponent>
+      )}
     </Card>
   );
 }

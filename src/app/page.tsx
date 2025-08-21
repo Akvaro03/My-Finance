@@ -20,8 +20,6 @@ import {
   ArrowDownRight,
 } from "lucide-react";
 import Header from "@/components/header";
-import { FloatingComponent } from "@/components/floatingComponent";
-import FormTransaction from "@/components/forms/FormTransaction";
 
 export default function DashboardPage() {
   const [showBalance, setShowBalance] = useState(true);
@@ -337,13 +335,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-      <FloatingComponent
-        title="Nueva Transacción"
-        isOpen={showTransaction}
-        onClose={toggleTransactionForm}
-      >
-        <FormTransaction />
-      </FloatingComponent>
     </div>
   );
 }
