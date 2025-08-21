@@ -20,13 +20,16 @@ function FormLogin({ goToSign }: { goToSign?: () => void }) {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-
+  const goToDashboard = () => {
+    window.location.href = "/";
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
     try {
       await logIn({ email, password });
+      goToDashboard();
       setError("");
     } catch (e) {
       setError(

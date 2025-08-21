@@ -20,10 +20,11 @@ export default function Header(
     monthlyExpenses: 3180.25,
   };
 
-  const handleLogout = () => {
-    fetch("/api/users/logout", {
+  const handleLogout = async () => {
+    await fetch("/api/users/logout", {
       method: "POST",
     });
+    window.location.href = "/login";
   };
   return (
     <header
