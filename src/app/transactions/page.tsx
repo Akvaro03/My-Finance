@@ -31,6 +31,7 @@ import useGetData from "@/hooks/useGetAccounts";
 import { TransactionWithRelations } from "@/types";
 import { categories } from "@/generated/prisma";
 import ListTransaction from "@/components/ListTransactions";
+import BackgroundDecoration from "@/components/BackgroundDecoration";
 
 export default function HistoryPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -80,8 +81,9 @@ export default function HistoryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen">
       <Header />
+      <BackgroundDecoration />
 
       <div className="relative p-6 max-w-7xl mx-auto">
         {/* Statistics Cards */}

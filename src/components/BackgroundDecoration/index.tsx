@@ -1,6 +1,6 @@
-export default function SiteBackground() {
+export default function BackgroundDecoration() {
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10">
+    <div aria-hidden="true" className="bg-gradient-to-br from-slate-2 via-slate-800 to-slate-2 pointer-events-none fixed inset-0 -z-10">
       {/* Base dark */}
       <div className="absolute inset-0 bg-neutral-950" />
       {/* Radial glow */}

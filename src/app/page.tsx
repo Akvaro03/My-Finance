@@ -65,7 +65,7 @@ export default function DashboardPage() {
     window.location.href = "/transactions";
   };
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-2 via-slate-800 to-slate-2">
+    <div className="min-h-screen">
       <Header />
       {/* Background decoration */}
       <BackgroundDecoration />
