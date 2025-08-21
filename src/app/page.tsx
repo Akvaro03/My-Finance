@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import Header from "@/components/header";
 import ListTransaction from "@/components/ListTransactions";
+import BackgroundDecoration from "@/components/BackgroundDecoration";
 
 export default function DashboardPage() {
   const [showBalance, setShowBalance] = useState(true);
@@ -64,13 +65,10 @@ export default function DashboardPage() {
     window.location.href = "/transactions";
   };
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-2 via-slate-800 to-slate-2">
       <Header />
       {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-sky-500/10 rounded-full blur-3xl"></div>
-      </div>
+      <BackgroundDecoration />
 
       <div className="relative p-6 max-w-7xl mx-auto">
         {/* Balance Card */}
@@ -127,7 +125,10 @@ export default function DashboardPage() {
             </div>
           </Button>
 
-          <Button onClick={goToHistory} className="h-16 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 text-white justify-start gap-3 transition-all duration-200 hover:scale-[1.02]">
+          <Button
+            onClick={goToHistory}
+            className="h-16 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 text-white justify-start gap-3 transition-all duration-200 hover:scale-[1.02]"
+          >
             <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
               <History className="w-5 h-5 text-blue-400" />
             </div>
