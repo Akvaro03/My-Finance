@@ -34,41 +34,6 @@ export default function DashboardPage() {
     monthlyExpenses: 3180.25,
   };
 
-  const recentTransactions = [
-    {
-      id: 1,
-      type: "expense",
-      description: "Grocery Shopping",
-      amount: -85.5,
-      date: "Today",
-      category: "Food",
-    },
-    {
-      id: 2,
-      type: "income",
-      description: "Salary Deposit",
-      amount: 2600.0,
-      date: "Yesterday",
-      category: "Salary",
-    },
-    {
-      id: 3,
-      type: "expense",
-      description: "Netflix Subscription",
-      amount: -15.99,
-      date: "2 days ago",
-      category: "Entertainment",
-    },
-    {
-      id: 4,
-      type: "expense",
-      description: "Gas Station",
-      amount: -45.0,
-      date: "3 days ago",
-      category: "Transport",
-    },
-  ];
-
   const goals = [
     {
       id: 1,
