@@ -20,13 +20,10 @@ import {
   ArrowDownRight,
 } from "lucide-react";
 import Header from "@/components/header";
+import ListTransaction from "@/components/ListTransactions";
 
 export default function DashboardPage() {
   const [showBalance, setShowBalance] = useState(true);
-  const [showTransaction, setShowTransaction] = useState(false);
-  const toggleTransactionForm = () => {
-    setShowTransaction(!showTransaction);
-  };
   // Mock user data
   const user = {
     name: "Alex Johnson",
@@ -95,7 +92,12 @@ export default function DashboardPage() {
       color: "bg-purple-500",
     },
   ];
-
+  const goToNeWTransactionPage = () => {
+    window.location.href = "/transactions/new";
+  };
+  const goToHistory = () => {
+    window.location.href = "/transactions";
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <Header />
@@ -148,7 +150,7 @@ export default function DashboardPage() {
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <Button
-            onClick={toggleTransactionForm}
+            onClick={goToNeWTransactionPage}
             className="h-16 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 text-white justify-start gap-3 transition-all duration-200 hover:scale-[1.02]"
           >
             <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
@@ -160,7 +162,7 @@ export default function DashboardPage() {
             </div>
           </Button>
 
-          <Button className="h-16 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 text-white justify-start gap-3 transition-all duration-200 hover:scale-[1.02]">
+          <Button onClick={goToHistory} className="h-16 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 text-white justify-start gap-3 transition-all duration-200 hover:scale-[1.02]">
             <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
               <History className="w-5 h-5 text-blue-400" />
             </div>
@@ -230,7 +232,8 @@ export default function DashboardPage() {
             </div>
 
             {/* Recent Transactions */}
-            <Card className="bg-slate-800/50 border-slate-700">
+            <ListTransaction title="Some Transactions" />
+            {/* <Card className="bg-slate-800/50 border-slate-700">
               <CardHeader>
                 <CardTitle className="text-white">
                   Recent Transactions
@@ -285,7 +288,7 @@ export default function DashboardPage() {
                   ))}
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
 
           {/* Goals Section */}
