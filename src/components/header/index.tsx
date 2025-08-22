@@ -26,6 +26,7 @@ export default function Header(
     });
     window.location.href = "/login";
   };
+
   return (
     <header
       className={cn(
@@ -44,37 +45,55 @@ export default function Header(
           </span>
           <span className="text-zinc-100">Finance</span>
         </Link>
-        <div className="flex items-center gap-1 tracking-wide text-2xl transition-all">
+
+        {/* Navegación desktop */}
+        <nav className="hidden md:flex items-center gap-6">
+          <Link
+            href="/transactions"
+            className="text-zinc-200 hover:text-white transition-colors text-sm font-medium"
+          >
+            History
+          </Link>
+          <Link
+            href="/transactions/new"
+            className="text-zinc-200 hover:text-white transition-colors text-sm font-medium"
+          >
+            Add Expense
+          </Link>
+          <Link
+            href="/budgets"
+            className="text-zinc-200 hover:text-white transition-colors text-sm font-medium"
+          >
+            Add Goal
+          </Link>
+        </nav>
+
+        {/* Usuario desktop */}
+        <div className="hidden md:flex items-center gap-4">
+          <div className="text-right">
+            <p className="text-white font-medium">{user.name}</p>
+            <p className="text-slate-400 text-sm">{user.email}</p>
+          </div>
+          <Avatar className="w-10 h-10">
+            <AvatarImage src={user.avatar || undefined} alt={user.name} />
+            <AvatarFallback className="bg-blue-600 text-white">
+              {user.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")}
+            </AvatarFallback>
+          </Avatar>
           <Button
             variant="link"
             className="text-zinc-200"
-            aria-label="Abrir navegación"
             onClick={handleLogout}
           >
             Logout
           </Button>
-          <div className="flex items-center gap-4">
-            <div className="hidden md:block text-right">
-              <p className="text-white font-medium">{user.name}</p>
-              <p className="text-slate-400 text-sm">{user.email}</p>
-            </div>
-            <Avatar className="w-10 h-10">
-              <AvatarImage
-                src={user.avatar || undefined}
-                alt={user.name}
-              />
-              <AvatarFallback className="bg-blue-600 text-white">
-                {user.name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")}
-              </AvatarFallback>
-            </Avatar>
-          </div>
         </div>
 
         {/* Mobile Menu Button */}
-        <div className="flex items-center gap-1 md:hidden">
+        <div className="flex md:hidden items-center gap-1">
           <Button
             variant="ghost"
             className="text-zinc-200"
@@ -92,16 +111,14 @@ export default function Header(
           className="md:hidden border-t border-white/10 bg-neutral-950/80 backdrop-blur px-4 py-3 space-y-3"
           onClick={() => setOpen(false)}
         >
+          {/* Usuario en mobile */}
           <div className="flex items-center gap-3">
             <div className="text-right">
               <p className="text-white font-medium">{user.name}</p>
               <p className="text-slate-400 text-sm">{user.email}</p>
             </div>
             <Avatar className="w-10 h-10">
-              <AvatarImage
-                src={user.avatar || undefined}
-                alt={user.name}
-              />
+              <AvatarImage src={user.avatar || undefined} alt={user.name} />
               <AvatarFallback className="bg-blue-600 text-white">
                 {user.name
                   .split(" ")
@@ -110,6 +127,35 @@ export default function Header(
               </AvatarFallback>
             </Avatar>
           </div>
+
+          {/* Navegación en mobile */}
+          <nav className="flex flex-col space-y-2 pt-2">
+            <Link
+              href="/history"
+              className="text-zinc-200 hover:text-white transition-colors text-sm font-medium"
+            >
+              History
+            </Link>
+            <Link
+              href="/expenses/add"
+              className="text-zinc-200 hover:text-white transition-colors text-sm font-medium"
+            >
+              Add Expense
+            </Link>
+            <Link
+              href="/goals/add"
+              className="text-zinc-200 hover:text-white transition-colors text-sm font-medium"
+            >
+              Add Goal
+            </Link>
+            <Button
+              variant="link"
+              className="text-zinc-200 justify-start p-0"
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          </nav>
         </div>
       )}
     </header>
