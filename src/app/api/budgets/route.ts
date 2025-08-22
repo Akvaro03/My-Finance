@@ -52,6 +52,7 @@ export async function GET(req: Request) {
     const budgetsWithExpenses = budgets.map((b) => ({
       ...b,
       expense: expensesMap.get(b.category_id) ?? 0,
+      amount: b.amount.toNumber()
     }));
 
     return NextResponse.json(budgetsWithExpenses, { status: 200 });

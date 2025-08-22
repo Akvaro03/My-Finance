@@ -22,7 +22,7 @@ function ListBudgets() {
       <CardContent>
         <div className="space-y-6">
           {data?.map((goal) => {
-            const progress = (goal.amount / goal.expense) * 100;
+            const progress = (goal.expense / goal.amount) * 100;
             return (
               <div key={goal.id} className="space-y-2">
                 <div className="flex items-center justify-between">
