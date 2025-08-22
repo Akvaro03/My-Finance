@@ -33,7 +33,6 @@ export default function DashboardPage() {
     monthlyIncome: data?.monthlyIncome || 0,
     monthlyExpenses: data?.monthlyExpenses || 0,
   };
-  console.log(data);
   const goToNeWTransactionPage = () => {
     window.location.href = "/transactions/new";
   };
