@@ -10,8 +10,8 @@ function NewTransactionPage() {
       {/* Background decoration */}
       <BackgroundDecoration />
       <div className="flex flex-1 items-center justify-center">
-        <div className="bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-2xl p-4 w-full max-w-lg">
-          <h2 className="text-2xl font-bold text-white text-center flex-1">
+        <div className="bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-2xl p-8 w-full max-w-lg">
+          <h2 className="text-2xl pb-4 font-bold text-white text-center flex-1">
             New Transaction
           </h2>
           <FormTransaction />
