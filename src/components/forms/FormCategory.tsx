@@ -15,7 +15,7 @@ function FormCategory() {
   const [formData, setFormData] = useState({
     name: "",
     type: "",
-    color: null,
+    color: "#0000",
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -29,26 +29,26 @@ function FormCategory() {
     try {
       setIsLoading(true);
       setError(null);
-      console.log(formData)
-      // const res = await fetch("/api/categories", {
-      //   method: "POST",
-      //   body: JSON.stringify({
-      //     name: formData.name,
-      //     type: formData.type === "1" ? "income" : "expense",
-      //     color: "#000000",
-      //   }),
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      // });
+      console.log(formData);
+      const res = await fetch("/api/categories", {
+        method: "POST",
+        body: JSON.stringify({
+          name: formData.name,
+          type: formData.type === "1" ? "income" : "expense",
+          color: formData.color,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-      // if (!res.ok) {
-      //   const data = await res.json();
-      //   throw new Error(data.error || "Failed to create account");
-      // }
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to create account");
+      }
 
-      // // Reset form al éxito
-      // setFormData({ name: "", type: "", color: "#000000" });
+      // Reset form al éxito
+      setFormData({ name: "", type: "", color: "#000000" });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unexpected error");
     } finally {

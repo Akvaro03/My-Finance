@@ -11,7 +11,6 @@ import { BudgetWithExpense } from "@/types";
 
 function ListBudgets() {
   const { data } = useGetData<BudgetWithExpense[]>("/budgets");
-  console.log(data);
   return (
     <Card className="bg-slate-800/50 border-slate-700">
       <CardHeader>

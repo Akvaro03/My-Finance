@@ -1,10 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Plus,
   History,
@@ -29,18 +26,19 @@ type financeBasics = {
 
 export default function DashboardPage() {
   const { data } = useGetData<financeBasics>("/financeBasics");
-  const { data: budgetData } = useGetData<financeBasics>("/budgets");
   const [showBalance, setShowBalance] = useState(true);
   // Mock user data
-  console.log(budgetData);
   const user = {
     balance: data?.balance || 0,
     monthlyIncome: data?.monthlyIncome || 0,
     monthlyExpenses: data?.monthlyExpenses || 0,
   };
-
+  console.log(data);
   const goToNeWTransactionPage = () => {
     window.location.href = "/transactions/new";
+  };
+  const goToNewBudgetsPage = () => {
+    window.location.href = "/budgets";
   };
   const goToHistory = () => {
     window.location.href = "/transactions";
@@ -80,13 +78,15 @@ export default function DashboardPage() {
                   </Button>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="flex items-center gap-2 text-green-200 mb-1">
-                  <TrendingUp className="w-4 h-4" />
-                  <span className="text-sm">+12.5%</span>
+              {data?.balanceDiff && (
+                <div className="text-right">
+                  <div className="flex items-center gap-2 text-green-200 mb-1">
+                    <TrendingUp className="w-4 h-4" />
+                    <span className="text-sm">+12.5%</span>
+                  </div>
+                  <p className="text-blue-100 text-sm">vs last month</p>
                 </div>
-                <p className="text-blue-100 text-sm">vs last month</p>
-              </div>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -119,7 +119,10 @@ export default function DashboardPage() {
             </div>
           </Button>
 
-          <Button className="h-16 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 text-white justify-start gap-3 transition-all duration-200 hover:scale-[1.02]">
+          <Button
+            onClick={goToNewBudgetsPage}
+            className="h-16 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 text-white justify-start gap-3 transition-all duration-200 hover:scale-[1.02]"
+          >
             <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
               <Target className="w-5 h-5 text-green-400" />
             </div>
