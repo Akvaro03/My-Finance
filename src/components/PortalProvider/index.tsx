@@ -86,7 +86,7 @@ export const PortalProvider = ({ children }: { children: ReactNode }) => {
                 onClick={closePortal} // 👈 ahora también dispara onClose del padre
               >
                 <motion.div
-                  className="bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-2xl p-6 relative w-[90%] max-w-lg"
+                  className="bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl p-6 relative w-[90%] max-w-lg"
                   initial={{ scale: 0.9, opacity: 0, y: 50 }}
                   animate={{ scale: 1, opacity: 1, y: 0 }}
                   exit={{ scale: 0.9, opacity: 0, y: 50 }}
