@@ -33,7 +33,7 @@ export async function GET(req: Request) {
         accounts: true,
         categories: true,
       },
-      orderBy: { date: "desc" },
+      orderBy: { created_at: "desc" },
     });
 
     return NextResponse.json(transactions, { status: 200 });
