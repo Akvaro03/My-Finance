@@ -1,15 +1,10 @@
 "use client";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -20,9 +15,6 @@ import {
 import {
   DollarSign,
   Search,
-  Filter,
-  ArrowUpRight,
-  ArrowDownRight,
   TrendingUp,
   TrendingDown,
 } from "lucide-react";
@@ -39,8 +31,8 @@ export default function HistoryPage() {
   const [selectedType, setSelectedType] = useState("all");
   const [selectedPeriod, setSelectedPeriod] = useState("all");
 
-  const { data } = useGetData<TransactionWithRelations>("/transactions");
-  const { data: categoriesData } = useGetData<categories>("/categories");
+  const { data } = useGetData<TransactionWithRelations[]>("/transactions");
+  const { data: categoriesData } = useGetData<categories[]>("/categories");
 
   // Mock transaction data
   const allTransactions = data || []; // Use fetched data or fallback to empty array
@@ -70,16 +62,6 @@ export default function HistoryPage() {
     .reduce((sum, t) => sum + Math.abs(Number(t.amount)), 0);
 
   const netAmount = totalIncome - totalExpenses;
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
-
   return (
     <div className="min-h-screen">
       <Header />
