@@ -4,11 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import {
   Plus,
   History,
@@ -43,29 +39,6 @@ export default function DashboardPage() {
     monthlyExpenses: data?.monthlyExpenses || 0,
   };
 
-  const goals = [
-    {
-      id: 1,
-      title: "Emergency Fund",
-      current: 3200,
-      target: 10000,
-      color: "bg-blue-500",
-    },
-    {
-      id: 2,
-      title: "Vacation",
-      current: 1800,
-      target: 3000,
-      color: "bg-green-500",
-    },
-    {
-      id: 3,
-      title: "New Car",
-      current: 8500,
-      target: 25000,
-      color: "bg-purple-500",
-    },
-  ];
   const goToNeWTransactionPage = () => {
     window.location.href = "/transactions/new";
   };

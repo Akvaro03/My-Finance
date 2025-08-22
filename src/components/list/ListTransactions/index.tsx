@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import useGetData from "@/hooks/useGetData";
 import { TransactionWithRelations } from "@/types";
-import { ArrowDownRight, ArrowUpRight, Filter, Search } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, Search } from "lucide-react";
 
 function ListTransaction({
   dataProp,
