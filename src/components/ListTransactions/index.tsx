@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import useGetData from "@/hooks/useGetAccounts";
+import useGetData from "@/hooks/useGetData";
 import { TransactionWithRelations } from "@/types";
 import { Button } from "../ui/button";
 import { ArrowDownRight, ArrowUpRight, Filter, Search } from "lucide-react";
@@ -22,7 +22,7 @@ function ListTransaction({
   listNumber?: number;
   title?:string
 }) {
-  const { data } = useGetData<TransactionWithRelations>("/transactions");
+  const { data } = useGetData<TransactionWithRelations[]>("/transactions");
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {

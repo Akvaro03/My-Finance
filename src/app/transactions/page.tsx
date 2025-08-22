@@ -27,7 +27,7 @@ import {
   TrendingDown,
 } from "lucide-react";
 import Header from "@/components/header";
-import useGetData from "@/hooks/useGetAccounts";
+import useGetData from "@/hooks/useGetData";
 import { TransactionWithRelations } from "@/types";
 import { categories } from "@/generated/prisma";
 import ListTransaction from "@/components/ListTransactions";

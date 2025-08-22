@@ -22,17 +22,23 @@ import {
 import Header from "@/components/header";
 import ListTransaction from "@/components/ListTransactions";
 import BackgroundDecoration from "@/components/BackgroundDecoration";
+import useGetData from "@/hooks/useGetData";
+type financeBasics = {
+  balance: number;
+  monthlyIncome: number;
+  monthlyExpenses: number;
+  balanceDiff: number;
+}
 
 export default function DashboardPage() {
+  const { data } = useGetData<financeBasics>("/financeBasics");
   const [showBalance, setShowBalance] = useState(true);
   // Mock user data
+  console.log(data)
   const user = {
-    name: "Alex Johnson",
-    email: "demo@myfinance.com",
-    avatar: "/placeholder-user.png",
-    balance: 12450.75,
-    monthlyIncome: 5200.0,
-    monthlyExpenses: 3180.25,
+    balance: data?.balance || 0,
+    monthlyIncome: data?.monthlyIncome || 0,
+    monthlyExpenses: data?.monthlyExpenses || 0,
   };
 
   const goals = [

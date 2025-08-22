@@ -13,7 +13,7 @@ import {
 } from "../ui/select";
 import FormAccount from "./FormAccount";
 import FormCategory from "./FormCategory";
-import useGetData from "@/hooks/useGetAccounts";
+import useGetData from "@/hooks/useGetData";
 import { accounts, categories } from "@/generated/prisma";
 import SelectType from "../selectType";
 import PortalComponent from "../PortalComponent";
@@ -37,12 +37,12 @@ function FormTransaction() {
     data: accounts,
     isLoading: isLoadingAccounts,
     refetch: refetchAccounts,
-  } = useGetData<accounts>("/account");
+  } = useGetData<accounts[]>("/account");
   const {
     data: categories,
     isLoading: isLoadingCategories,
     refetch: refetchCategories,
-  } = useGetData<categories>("/categories");
+  } = useGetData<categories[]>("/categories");
 
   const handleShowAdd = (type: "account" | "category") => {
     if (type === "account") {
