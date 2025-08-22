@@ -15,7 +15,7 @@ function FormCategory() {
   const [formData, setFormData] = useState({
     name: "",
     type: "",
-    color: "000000",
+    color: null,
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -29,26 +29,26 @@ function FormCategory() {
     try {
       setIsLoading(true);
       setError(null);
+      console.log(formData)
+      // const res = await fetch("/api/categories", {
+      //   method: "POST",
+      //   body: JSON.stringify({
+      //     name: formData.name,
+      //     type: formData.type === "1" ? "income" : "expense",
+      //     color: "#000000",
+      //   }),
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      // });
 
-      const res = await fetch("/api/categories", {
-        method: "POST",
-        body: JSON.stringify({
-          name: formData.name,
-          type: formData.type === "1" ? "income" : "expense",
-          color: "#000000",
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      // if (!res.ok) {
+      //   const data = await res.json();
+      //   throw new Error(data.error || "Failed to create account");
+      // }
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Failed to create account");
-      }
-
-      // Reset form al éxito
-      setFormData({ name: "", type: "", color: "#000000" });
+      // // Reset form al éxito
+      // setFormData({ name: "", type: "", color: "#000000" });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unexpected error");
     } finally {
@@ -85,14 +85,14 @@ function FormCategory() {
             </Label>
             <Input
               id="balance"
-              type="number"
+              type="color"
               value={formData.color}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, color: e.target.value }))
               }
               placeholder="Enter initial balance"
               min={0}
-              className="bg-slate-800/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-blue-500/20 transition-all duration-200 hover:bg-slate-800/70"
+              className="w-25 bg-slate-800/50 border-slate-600 text-white placeholder:text-slate-500 focus:border-blue-500 focus:ring-blue-500/20 transition-all duration-200 hover:bg-slate-800/70"
             />
           </div>
           <SelectType
