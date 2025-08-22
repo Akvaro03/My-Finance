@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -7,9 +8,7 @@ import {
 } from "@/components/ui/card";
 import useGetData from "@/hooks/useGetData";
 import { TransactionWithRelations } from "@/types";
-import { Button } from "../ui/button";
 import { ArrowDownRight, ArrowUpRight, Filter, Search } from "lucide-react";
-import { Badge } from "../ui/badge";
 
 function ListTransaction({
   dataProp,
@@ -38,7 +37,6 @@ function ListTransaction({
     ? data.length
     : 0;
 
-  console.log(TransactionsInfo);
   return (
     <Card className="bg-slate-800/50 border-slate-700">
       <CardHeader>

@@ -22,8 +22,8 @@ import Header from "@/components/header";
 import useGetData from "@/hooks/useGetData";
 import { TransactionWithRelations } from "@/types";
 import { categories } from "@/generated/prisma";
-import ListTransaction from "@/components/ListTransactions";
 import BackgroundDecoration from "@/components/BackgroundDecoration";
+import ListTransaction from "@/components/list/ListTransactions";
 
 export default function HistoryPage() {
   const [searchTerm, setSearchTerm] = useState("");

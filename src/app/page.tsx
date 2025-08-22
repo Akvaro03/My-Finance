@@ -20,21 +20,23 @@ import {
   ArrowDownRight,
 } from "lucide-react";
 import Header from "@/components/header";
-import ListTransaction from "@/components/ListTransactions";
 import BackgroundDecoration from "@/components/BackgroundDecoration";
 import useGetData from "@/hooks/useGetData";
+import ListTransaction from "@/components/list/ListTransactions";
+import ListBudgets from "@/components/list/ListBudgets";
 type financeBasics = {
   balance: number;
   monthlyIncome: number;
   monthlyExpenses: number;
   balanceDiff: number;
-}
+};
 
 export default function DashboardPage() {
   const { data } = useGetData<financeBasics>("/financeBasics");
+  const { data: budgetData } = useGetData<financeBasics>("/budgets");
   const [showBalance, setShowBalance] = useState(true);
   // Mock user data
-  console.log(data)
+  console.log(budgetData);
   const user = {
     balance: data?.balance || 0,
     monthlyIncome: data?.monthlyIncome || 0,
@@ -205,109 +207,10 @@ export default function DashboardPage() {
 
             {/* Recent Transactions */}
             <ListTransaction title="Some Transactions" />
-            {/* <Card className="bg-slate-800/50 border-slate-700">
-              <CardHeader>
-                <CardTitle className="text-white">
-                  Recent Transactions
-                </CardTitle>
-                <CardDescription className="text-slate-400">
-                  Your latest financial activity
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {recentTransactions.map((transaction) => (
-                    <div
-                      key={transaction.id}
-                      className="flex items-center justify-between p-3 rounded-lg bg-slate-700/30 hover:bg-slate-700/50 transition-colors"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                            transaction.type === "income"
-                              ? "bg-green-500/20"
-                              : "bg-red-500/20"
-                          }`}
-                        >
-                          {transaction.type === "income" ? (
-                            <ArrowUpRight className="w-5 h-5 text-green-400" />
-                          ) : (
-                            <ArrowDownRight className="w-5 h-5 text-red-400" />
-                          )}
-                        </div>
-                        <div>
-                          <p className="text-white font-medium">
-                            {transaction.description}
-                          </p>
-                          <p className="text-slate-400 text-sm">
-                            {transaction.date} • {transaction.category}
-                          </p>
-                        </div>
-                      </div>
-                      <p
-                        className={`font-bold ${
-                          transaction.type === "income"
-                            ? "text-green-400"
-                            : "text-red-400"
-                        }`}
-                      >
-                        {transaction.type === "income" ? "+" : ""}$
-                        {Math.abs(transaction.amount).toLocaleString("en-US", {
-                          minimumFractionDigits: 2,
-                        })}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card> */}
           </div>
 
           {/* Goals Section */}
-          <div>
-            <Card className="bg-slate-800/50 border-slate-700">
-              <CardHeader>
-                <CardTitle className="text-white">Savings Goals</CardTitle>
-                <CardDescription className="text-slate-400">
-                  Track your progress
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  {goals.map((goal) => {
-                    const progress = (goal.current / goal.target) * 100;
-                    return (
-                      <div key={goal.id} className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <p className="text-white font-medium">{goal.title}</p>
-                          <Badge
-                            variant="secondary"
-                            className="bg-slate-700 text-slate-300"
-                          >
-                            {Math.round(progress)}%
-                          </Badge>
-                        </div>
-                        <div className="w-full bg-slate-700 rounded-full h-2">
-                          <div
-                            className={`h-2 rounded-full ${goal.color} transition-all duration-500`}
-                            style={{ width: `${Math.min(progress, 100)}%` }}
-                          ></div>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-slate-400">
-                            ${goal.current.toLocaleString("en-US")}
-                          </span>
-                          <span className="text-slate-400">
-                            ${goal.target.toLocaleString("en-US")}
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <ListBudgets />
         </div>
       </div>
     </div>

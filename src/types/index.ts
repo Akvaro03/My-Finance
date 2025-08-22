@@ -24,5 +24,23 @@ type TransactionWithRelations = {
     user_id: number;
   } | null;
 };
+type BudgetWithExpense = {
+  id: number;
+  user_id: number;
+  category_id: number;
+  month: number;
+  month_num: number;
+  amount: number;
+  created_at: Date | null;
+  categories: {
+    id: number;
+    name: string;
+    type: "income" | "expense";
+    color: string | null;
+    parent_id: number | null;
+    user_id: number;
+  };
+  expense: number;
+};
 
-export type { TransactionWithRelations };
+export type { TransactionWithRelations , BudgetWithExpense};
