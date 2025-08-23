@@ -30,7 +30,6 @@ function FormTransaction() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const [showAddAccount, setShowAddAccount] = useState(false);
   const [showAddCategory, setShowAddCategory] = useState(false);
   const {
@@ -59,7 +58,8 @@ function FormTransaction() {
     try {
       setIsLoading(true);
       setError(null);
-      console.log(formData);
+      const typeFormat = formData.categoryId === "0" ? undefined :
+        parseInt(formData.categoryId)
       await fetch("/api/transactions", {
         method: "POST",
         headers: {
@@ -67,9 +67,8 @@ function FormTransaction() {
         },
         body: JSON.stringify({
           account_id: parseInt(formData.accountId),
-          category_id: formData.categoryId
-            ? parseInt(formData.categoryId)
-            : null,
+          category_id: typeFormat
+          ,
           type: formData.typeId === "1" ? "income" : "expense",
           amount: parseFloat(formData.amount),
           notes: formData.notes,
@@ -85,6 +84,12 @@ function FormTransaction() {
     value: string,
     type: "amount" | "typeId" | "notes" | "accountId" | "categoryId"
   ) => {
+    if (categories && type === "categoryId" && value !== "0") {
+
+      const typeId = categories[Number(value) - 1].type === "income" ? 1 : 2;
+
+      setFormData(prev => ({ ...prev, typeId: String(typeId) }));
+    }
     setFormData((prev) => ({ ...prev, [type]: value }));
   };
   return (
@@ -159,6 +164,12 @@ function FormTransaction() {
                   />
                 </SelectTrigger>
                 <SelectContent className="bg-slate-800 border border-slate-600 text-white">
+                  <SelectItem
+                    value={"0"}
+                    className="hover:bg-slate-700 focus:bg-slate-700 focus:text-white"
+                  >
+                    None
+                  </SelectItem>
                   {categories && categories[0] ? (
                     categories.map((acc) => (
                       <SelectItem
@@ -210,6 +221,7 @@ function FormTransaction() {
           <SelectType
             valueSelected={formData.typeId}
             onChange={(value) => handleFormDataChange(value, "typeId")}
+            isDisable={Number(formData.categoryId) > 0}
           />
 
           {/* Notes Field */}
