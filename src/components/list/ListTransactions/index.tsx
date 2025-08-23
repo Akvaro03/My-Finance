@@ -19,7 +19,7 @@ function ListTransaction({
   dataProp?: TransactionWithRelations[];
   limit?: number;
   listNumber?: number;
-  title?:string
+  title?: string
 }) {
   const { data } = useGetData<TransactionWithRelations[]>("/transactions");
   const formatDate = (dateString: string) => {
@@ -34,8 +34,8 @@ function ListTransaction({
   const TransactionTotalLength = listNumber
     ? listNumber
     : data
-    ? data.length
-    : 0;
+      ? data.length
+      : 0;
 
   return (
     <Card className="bg-slate-800/50 border-slate-700">
@@ -59,11 +59,10 @@ function ListTransaction({
             >
               <div className="flex items-center gap-4">
                 <div
-                  className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-                    transaction.type === "income"
+                  className={`w-12 h-12 rounded-lg flex items-center justify-center ${transaction.type === "income"
                       ? "bg-green-500/20"
                       : "bg-red-500/20"
-                  }`}
+                    }`}
                 >
                   {transaction.type === "income" ? (
                     <ArrowUpRight className="w-6 h-6 text-green-400" />
@@ -74,17 +73,18 @@ function ListTransaction({
                 <div>
                   <p className="text-white font-medium">{transaction.notes}</p>
                   <div className="flex items-center gap-2 mt-1">
-                    <Badge
-                      className={`text-xs ${
-                        transaction.categories
-                          ? transaction.categories.color
-                          : "#0000"
-                      }`}
-                    >
-                      {transaction.categories
-                        ? transaction.categories.name
-                        : ""}
-                    </Badge>
+                    {transaction.categories && (
+                      <Badge
+                        className={`text-xs ${transaction.categories
+                            ? transaction.categories.color
+                            : "#0000"
+                          }`}
+                      >
+                        {transaction.categories
+                          ? transaction.categories.name
+                          : ""}
+                      </Badge>
+                    )}
                     <span className="text-slate-400 text-sm">
                       {formatDate(transaction.date)}
                     </span>
@@ -93,11 +93,10 @@ function ListTransaction({
               </div>
               <div className="text-right">
                 <p
-                  className={`text-lg font-bold ${
-                    transaction.type === "income"
+                  className={`text-lg font-bold ${transaction.type === "income"
                       ? "text-green-400"
                       : "text-red-400"
-                  }`}
+                    }`}
                 >
                   {transaction.type === "income" ? "+" : "-"}$
                   {Math.abs(Number(transaction.amount)).toLocaleString(
