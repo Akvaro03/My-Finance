@@ -13,6 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import HandleErrorForm from "@/lib/handleErrorForm";
+import { toast } from "sonner";
 
 const accountTypes = [
   { value: "cash", label: "Cash" },
@@ -34,8 +36,14 @@ function FormAccount() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!formData.type) {
-      setError("Please select an account type");
+    const payload = {
+      name: formData.name,
+      type: formData.type,
+      balance: Number(formData.balance),
+    };
+    const errorZod = HandleErrorForm(payload, "account")
+    if (errorZod) {
+      setError("⚠️" + errorZod.message);
       return;
     }
 
@@ -45,14 +53,13 @@ function FormAccount() {
 
       const res = await fetch("/api/account", {
         method: "POST",
-        body: JSON.stringify({
-          name: formData.name,
-          type: formData.type,
-          balance: Number(formData.balance),
-        }),
+        body: JSON.stringify(payload),
         headers: {
           "Content-Type": "application/json",
         },
+      });
+      toast.success("Account added!", {
+        description: "Your account has been created.",
       });
 
       if (!res.ok) {

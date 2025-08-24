@@ -10,19 +10,16 @@ const transactionSchema = z.object({
     notes: z.string().optional(),
 });
 
-const transactionSchema2 = z.object({
-    account_id: z.number().int().positive(),
-    category_id: z.number().int().positive().optional(),
-    type: z.enum(["income", "expense"]),
-    amount: z.number().positive(),
-    date: z.string().datetime().optional(),
-    notes: z.string().optional(),
+const accountSchema = z.object({
+    name: z.string().min(1),
+    type: z.enum(["cash", "bank", "credit_card", "wallet"]),
+    balance: z.number().nonnegative().optional(),
 });
 
 // --- MAPA DE SCHEMAS ---
 const schemas = {
     transaction: transactionSchema,
-    transaction2: transactionSchema2,
+    account: accountSchema,
 };
 
 // --- MAPA DE ERRORES PERSONALIZADOS ---
@@ -35,13 +32,9 @@ const errorMessages = {
         date: "The date format is invalid",
         notes: "Notes must be valid text",
     },
-    transaction2: {
-        account_id: "⚠️ Account2 inválido",
-        category_id: "⚠️ Category2 inválida",
-        type: "⚠️ Type inválido",
-        amount: "⚠️ Amount inválido",
-        date: "⚠️ Date inválida",
-        notes: "⚠️ Notes inválidas",
+    account: {
+        name: "Name bust be valid text",
+        type: "The account type is invalid",
     },
 };
 
