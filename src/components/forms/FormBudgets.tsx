@@ -13,8 +13,10 @@ import {
 } from "../ui/select";
 import FormCategory from "./FormCategory";
 import useGetData from "@/hooks/useGetData";
-import {  categories } from "@/generated/prisma";
+import { categories } from "@/generated/prisma";
 import PortalComponent from "../PortalComponent";
+import HandleErrorForm from "@/lib/handleErrorForm";
+import { toast } from "sonner";
 // 👉 crearías algo similar para categorías
 
 function FormBudgets() {
@@ -41,24 +43,36 @@ function FormBudgets() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const thisYear = new Date().getFullYear();
+    const thisMonth = new Date().getMonth() + 1; // Los meses en
+
+    const payload = {
+      category_id: formData.categoryId
+        ? parseInt(formData.categoryId)
+        : null,
+      amount: parseFloat(formData.amount),
+      month: thisYear,
+      month_num: thisMonth,
+    };
+    // ✅ Validación con Zod antes de enviar
+    const errorZod = HandleErrorForm(payload, "budge")
+    if (errorZod) {
+      setError("⚠️" + errorZod.message);
+      return;
+    }
+
     try {
       setIsLoading(true);
       setError(null);
-      const thisYear = new Date().getFullYear();
-      const thisMonth = new Date().getMonth() + 1; // Los meses en
       await fetch("/api/budgets", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          category_id: formData.categoryId
-            ? parseInt(formData.categoryId)
-            : null,
-          amount: parseFloat(formData.amount),
-          month: thisYear,
-          month_num: thisMonth,
-        }),
+        body: JSON.stringify(payload),
+      });
+      toast.success("Budget added!", {
+        description: "Your budget has been created.",
       });
 
       setIsLoading(false);

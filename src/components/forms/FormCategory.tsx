@@ -7,6 +7,8 @@ import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
 import SelectType from "../selectType";
+import HandleErrorForm from "@/lib/handleErrorForm";
+import { toast } from "sonner";
 
 function FormCategory() {
   const [isLoading, setIsLoading] = useState(false);
@@ -15,31 +17,35 @@ function FormCategory() {
   const [formData, setFormData] = useState({
     name: "",
     type: "",
-    color: "#0000",
+    color: "#000000",
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (!formData.type) {
-      setError("Please select an account type");
+    const payload = {
+      name: formData.name,
+      type: formData.type === "1" ? "income" : formData.type === "2" ? "expense" : null,
+      color: formData.color,
+    };
+    // ✅ Validación con Zod antes de enviar
+    const errorZod = HandleErrorForm(payload, "category")
+    if (errorZod) {
+      setError("⚠️" + errorZod.message);
       return;
     }
 
     try {
       setIsLoading(true);
       setError(null);
-      console.log(formData);
       const res = await fetch("/api/categories", {
         method: "POST",
-        body: JSON.stringify({
-          name: formData.name,
-          type: formData.type === "1" ? "income" : "expense",
-          color: formData.color,
-        }),
+        body: JSON.stringify(payload),
         headers: {
           "Content-Type": "application/json",
         },
+      });
+      toast.success("Category added!", {
+        description: "Your category has been created.",
       });
 
       if (!res.ok) {
