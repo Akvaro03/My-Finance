@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { z } from "zod";
+import { z, ZodError } from "zod";
 import { getJwtUser } from "@/utils/encrypt";
 import { PrismaErrorHandler } from "@/lib/PrismaErrorHandler";
 
@@ -38,6 +38,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json(transactions, { status: 200 });
   } catch (error) {
+    console.log(error)
     return PrismaErrorHandler(error);
   }
 }
@@ -78,6 +79,14 @@ export async function POST(req: Request) {
 
     return NextResponse.json(transaction, { status: 201 });
   } catch (error) {
+    if (error instanceof ZodError) {
+      // Errores de validación → respuesta 400 con detalles
+      return NextResponse.json(
+        { error: "Validation failed", issues: error },
+        { status: 400 }
+      );
+    }
+
     return PrismaErrorHandler(error);
   }
 }

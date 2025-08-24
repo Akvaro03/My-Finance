@@ -3,7 +3,7 @@ import { Card, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
-import { Loader2, Plus } from "lucide-react";
+import { Info, Loader2, Plus } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -17,6 +17,10 @@ import useGetData from "@/hooks/useGetData";
 import { accounts, categories } from "@/generated/prisma";
 import SelectType from "../selectType";
 import PortalComponent from "../PortalComponent";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import z from "zod";
+import HandleErrorForm from "@/lib/handleErrorForm";
+import { toast } from "sonner";
 // 👉 crearías algo similar para categorías
 
 function FormTransaction() {
@@ -55,29 +59,41 @@ function FormTransaction() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
+
+    const payload = {
+      account_id: parseInt(formData.accountId),
+      category_id: formData.categoryId === "0" ? undefined : parseInt(formData.categoryId),
+      type: formData.typeId === "1" ? "income" : "expense",
+      amount: parseFloat(formData.amount),
+      notes: formData.notes || undefined,
+    };
+
+    // ✅ Validación con Zod antes de enviar
+    const errorZod = HandleErrorForm(payload, "transaction")
+    if (errorZod) {
+      setError("⚠️" + errorZod.message);
+      return;
+    }
+
     try {
       setIsLoading(true);
-      setError(null);
-      const typeFormat = formData.categoryId === "0" ? undefined :
-        parseInt(formData.categoryId)
+
       await fetch("/api/transactions", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          account_id: parseInt(formData.accountId),
-          category_id: typeFormat
-          ,
-          type: formData.typeId === "1" ? "income" : "expense",
-          amount: parseFloat(formData.amount),
-          notes: formData.notes,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
-
+      toast.success("Transaction added!", {
+        description: "Your balance has been updated.",
+      });
+      // reset form
+      setFormData({ amount: "", typeId: "", notes: "", categoryId: "", accountId: "" });
+    } catch (error) {
+      setError("❌ Error al crear la transacción.");
+      toast.error("❌ Something went wrong!");
+    } finally {
       setIsLoading(false);
-    } catch (error: unknown) {
-      setError("An error occurred while creating the transaction.");
     }
   };
   const handleFormDataChange = (
@@ -98,9 +114,20 @@ function FormTransaction() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Accounts Field */}
           <div className="space-y-2">
-            <Label htmlFor="account" className="text-slate-300 font-medium">
+            <Label htmlFor="account" className="text-slate-300 font-medium flex items-center gap-2">
               Accounts
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="w-4 h-4 text-slate-400 cursor-pointer hover:text-blue-400" />
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-slate-800 border border-slate-600 text-white text-sm">
+                    Aquí seleccionás desde qué cuenta vas a realizar la transacción (ej: banco, billetera, efectivo).
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </Label>
+
             <div className="flex gap-2 items-center">
               <Select
                 value={formData.accountId}
@@ -146,15 +173,27 @@ function FormTransaction() {
           </div>
           {/* Category Field */}
           <div className="space-y-2">
-            <Label htmlFor="account" className="text-slate-300 font-medium">
+            <Label htmlFor="account" className="text-slate-300 font-medium flex items-center gap-2">
               Category
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="w-4 h-4 text-slate-400 cursor-pointer hover:text-blue-400" />
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-slate-800 border border-slate-600 text-white text-sm">
+                    Aquí seleccionás desde qué cuenta vas a realizar la transacción (ej: banco, billetera, efectivo).
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </Label>
+
             <div className="flex gap-2 items-center">
               <Select
                 value={formData.categoryId}
                 onValueChange={(value) =>
                   handleFormDataChange(value, "categoryId")
                 }
+                disabled={!categories || categories.length === 0}
               >
                 <SelectTrigger className="flex-1 bg-slate-800/50 border-slate-600 text-white">
                   <SelectValue
@@ -288,5 +327,13 @@ function FormTransaction() {
     </Card>
   );
 }
+const transactionSchema = z.object({
+  account_id: z.number().int().positive(),
+  category_id: z.number().int().positive().optional(),
+  type: z.enum(["income", "expense"]),
+  amount: z.number().positive(),
+  date: z.string().datetime().optional(),
+  notes: z.string().optional(),
+});
 
 export default FormTransaction;
