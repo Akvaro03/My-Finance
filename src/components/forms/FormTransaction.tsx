@@ -17,7 +17,12 @@ import useGetData from "@/hooks/useGetData";
 import { accounts, categories } from "@/generated/prisma";
 import SelectType from "../selectType";
 import PortalComponent from "../PortalComponent";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 import z from "zod";
 import HandleErrorForm from "@/lib/handleErrorForm";
 import { toast } from "sonner";
@@ -63,14 +68,15 @@ function FormTransaction() {
 
     const payload = {
       account_id: parseInt(formData.accountId),
-      category_id: formData.categoryId === "0" ? undefined : parseInt(formData.categoryId),
+      category_id:
+        formData.categoryId === "0" ? undefined : parseInt(formData.categoryId),
       type: formData.typeId === "1" ? "income" : "expense",
       amount: parseFloat(formData.amount),
       notes: formData.notes || undefined,
     };
 
     // ✅ Validación con Zod antes de enviar
-    const errorZod = HandleErrorForm(payload, "transaction")
+    const errorZod = HandleErrorForm(payload, "transaction");
     if (errorZod) {
       setError("⚠️" + errorZod.message);
       return;
@@ -88,7 +94,13 @@ function FormTransaction() {
         description: "Your balance has been updated.",
       });
       // reset form
-      setFormData({ amount: "", typeId: "", notes: "", categoryId: "", accountId: "" });
+      setFormData({
+        amount: "",
+        typeId: "",
+        notes: "",
+        categoryId: "",
+        accountId: "",
+      });
     } catch (error) {
       setError("❌ Error al crear la transacción.");
       toast.error("❌ Something went wrong!");
@@ -101,10 +113,9 @@ function FormTransaction() {
     type: "amount" | "typeId" | "notes" | "accountId" | "categoryId"
   ) => {
     if (categories && type === "categoryId" && value !== "0") {
-
       const typeId = categories[Number(value) - 1].type === "income" ? 1 : 2;
 
-      setFormData(prev => ({ ...prev, typeId: String(typeId) }));
+      setFormData((prev) => ({ ...prev, typeId: String(typeId) }));
     }
     setFormData((prev) => ({ ...prev, [type]: value }));
   };
@@ -114,15 +125,19 @@ function FormTransaction() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Accounts Field */}
           <div className="space-y-2">
-            <Label htmlFor="account" className="text-slate-300 font-medium flex items-center gap-2">
+            <Label
+              htmlFor="account"
+              className="text-slate-300 font-medium flex items-center gap-2"
+            >
               Accounts
               <TooltipProvider>
-                <Tooltip>
+                <Tooltip defaultOpen={accounts?.length === 0}>
                   <TooltipTrigger asChild>
                     <Info className="w-4 h-4 text-slate-400 cursor-pointer hover:text-blue-400" />
                   </TooltipTrigger>
                   <TooltipContent className="bg-slate-800 border border-slate-600 text-white text-sm">
-                    Aquí seleccionás desde qué cuenta vas a realizar la transacción (ej: banco, billetera, efectivo).
+                    Select the account from which you will make the transaction
+                    (e.g., bank, wallet, cash).
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -173,15 +188,18 @@ function FormTransaction() {
           </div>
           {/* Category Field */}
           <div className="space-y-2">
-            <Label htmlFor="account" className="text-slate-300 font-medium flex items-center gap-2">
+            <Label
+              htmlFor="account"
+              className="text-slate-300 font-medium flex items-center gap-2"
+            >
               Category
               <TooltipProvider>
-                <Tooltip>
+                <Tooltip defaultOpen={categories?.length === 0}>
                   <TooltipTrigger asChild>
                     <Info className="w-4 h-4 text-slate-400 cursor-pointer hover:text-blue-400" />
                   </TooltipTrigger>
                   <TooltipContent className="bg-slate-800 border border-slate-600 text-white text-sm">
-                    Aquí seleccionás desde qué cuenta vas a realizar la transacción (ej: banco, billetera, efectivo).
+                    Select the category that corresponds to this transaction.
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
