@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 const SALT_ROUNDS = 10; // número de rondas, un equilibrio entre seguridad y tiempo de proceso
@@ -48,11 +49,25 @@ function getJwtUser(req: Request) {
   try {
     const user = jwt.verify(token, process.env.JWT_SECRET!);
     return user as { id: number; email?: string }; // tipado opcional
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     return null;
   }
 }
+async function getJwtUserFromCookies() {
+  const cookieStore = cookies(); // 🔹 NO usar await
+  const token = (await cookieStore).get("myFinance-User")?.value; // 🔹 aquí sí podemos usar .get()
+
+  if (!token) return null;
+
+  try {
+    const user = jwt.verify(token, process.env.JWT_SECRET!);
+    return user as { id: number; email?: string; name?: string };
+  } catch {
+    return null;
+  }
+}
+
 
 export {
   hashPassword,
@@ -60,4 +75,5 @@ export {
   generateJwtUser,
   getJwtUser,
   deleteJwtUser,
+  getJwtUserFromCookies,
 };

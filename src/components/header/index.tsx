@@ -8,18 +8,17 @@ import * as React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Header(
-  { showBorder = true }: { showBorder?: boolean } = { showBorder: true }
+  {
+    showBorder = true,
+    user,
+  }: {
+    showBorder?: boolean;
+    user?: { id: number; email?: string; name?: string };
+  } = {
+    showBorder: true,
+  }
 ) {
   const [open, setOpen] = React.useState(false);
-  const user = {
-    name: "Alex Johnson",
-    email: "demo@myfinance.com",
-    avatar: undefined,
-    balance: 12450.75,
-    monthlyIncome: 5200.0,
-    monthlyExpenses: 3180.25,
-  };
-
   const handleLogout = async () => {
     await fetch("/api/users/logout", {
       method: "POST",
@@ -71,18 +70,19 @@ export default function Header(
         {/* Usuario desktop */}
         <div className="hidden md:flex items-center gap-4">
           <div className="text-right">
-            <p className="text-white font-medium">{user.name}</p>
-            <p className="text-slate-400 text-sm">{user.email}</p>
+            <p className="text-slate-400 text-sm">{user?.email}</p>
           </div>
-          <Avatar className="w-10 h-10">
-            <AvatarImage src={user.avatar || undefined} alt={user.name} />
-            <AvatarFallback className="bg-blue-600 text-white">
-              {user.name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
-            </AvatarFallback>
-          </Avatar>
+          {user?.name && (
+            <Avatar className="w-10 h-10">
+              <AvatarImage src={undefined} alt={user?.name} />
+              <AvatarFallback className="bg-blue-600 text-white">
+                {user?.name
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
+              </AvatarFallback>
+            </Avatar>
+          )}
           <Button
             variant="link"
             className="text-zinc-200"
@@ -114,18 +114,22 @@ export default function Header(
           {/* Usuario en mobile */}
           <div className="flex items-center gap-3">
             <div className="text-right">
-              <p className="text-white font-medium">{user.name}</p>
-              <p className="text-slate-400 text-sm">{user.email}</p>
+              {user?.name && (
+                <p className="text-white font-medium">{user.name}</p>
+              )}
+              <p className="text-slate-400 text-sm">{user?.email}</p>
             </div>
-            <Avatar className="w-10 h-10">
-              <AvatarImage src={user.avatar || undefined} alt={user.name} />
-              <AvatarFallback className="bg-blue-600 text-white">
-                {user.name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")}
-              </AvatarFallback>
-            </Avatar>
+            {user?.name && (
+              <Avatar className="w-10 h-10">
+                <AvatarImage src={undefined} alt={user?.name} />
+                <AvatarFallback className="bg-blue-600 text-white">
+                  {user?.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")}
+                </AvatarFallback>
+              </Avatar>
+            )}
           </div>
 
           {/* Navegación en mobile */}

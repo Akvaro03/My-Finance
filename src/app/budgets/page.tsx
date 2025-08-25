@@ -1,12 +1,10 @@
 "use client";
 import BackgroundDecoration from "@/components/BackgroundDecoration";
 import FormBudgets from "@/components/forms/FormBudgets";
-import Header from "@/components/header";
 
 function NewBudgetsPage() {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       {/* Background decoration */}
       <BackgroundDecoration />
       <div className="flex flex-1 items-center justify-center">

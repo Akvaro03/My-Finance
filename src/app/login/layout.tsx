@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import { PortalProvider } from "@/components/PortalProvider";
 import { Toaster } from "sonner";
-import { cookies } from "next/headers";
-import Header from "@/components/header";
-import { getJwtUser, getJwtUserFromCookies } from "@/utils/encrypt";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,16 +24,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await getJwtUserFromCookies();
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <PortalProvider>
-          {user && <Header user={user} />}
-          {children}
-        </PortalProvider>
+        <PortalProvider>{children}</PortalProvider>
         <Toaster
           expand={true}
           closeButton

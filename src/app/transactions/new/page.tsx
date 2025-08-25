@@ -1,12 +1,10 @@
 "use client";
 import BackgroundDecoration from "@/components/BackgroundDecoration";
 import FormTransaction from "@/components/forms/FormTransaction";
-import Header from "@/components/header";
 
 function NewTransactionPage() {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       {/* Background decoration */}
       <BackgroundDecoration />
       <div className="flex flex-1 items-center justify-center">

@@ -18,7 +18,6 @@ import {
   TrendingUp,
   TrendingDown,
 } from "lucide-react";
-import Header from "@/components/header";
 import useGetData from "@/hooks/useGetData";
 import { TransactionWithRelations } from "@/types";
 import { categories } from "@/generated/prisma";
@@ -64,7 +63,6 @@ export default function HistoryPage() {
   const netAmount = totalIncome - totalExpenses;
   return (
     <div className="min-h-screen">
-      <Header />
       <BackgroundDecoration />
 
       <div className="relative p-6 max-w-7xl mx-auto">

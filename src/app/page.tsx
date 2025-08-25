@@ -12,7 +12,6 @@ import {
   ArrowUpRight,
   ArrowDownRight,
 } from "lucide-react";
-import Header from "@/components/header";
 import BackgroundDecoration from "@/components/BackgroundDecoration";
 import useGetData from "@/hooks/useGetData";
 import ListTransaction from "@/components/list/ListTransactions";
@@ -44,7 +43,6 @@ export default function DashboardPage() {
   };
   return (
     <div className="min-h-screen">
-      <Header />
       {/* Background decoration */}
       <BackgroundDecoration />
 
