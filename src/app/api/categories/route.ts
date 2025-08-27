@@ -29,7 +29,7 @@ export async function GET(req: Request) {
         categories: true, // subcategoría padre
         other_categories: true, // subcategorías hijas
       },
-      orderBy: { name: "asc" },
+      orderBy: { id: "asc" },
     });
 
     return NextResponse.json(categories, { status: 200 });
