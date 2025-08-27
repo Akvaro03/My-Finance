@@ -62,7 +62,7 @@ export default function HistoryPage() {
 
   const netAmount = totalIncome - totalExpenses;
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen p-16" >
       <BackgroundDecoration />
 
       <div className="relative p-6 max-w-7xl mx-auto">

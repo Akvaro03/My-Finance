@@ -4,7 +4,7 @@ import FormTransaction from "@/components/forms/FormTransaction";
 
 function NewTransactionPage() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col pt-16"> 
       {/* Background decoration */}
       <BackgroundDecoration />
       <div className="flex flex-1 items-center justify-center">

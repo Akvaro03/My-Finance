@@ -29,7 +29,7 @@ export default function Header(
   return (
     <header
       className={cn(
-        "sticky top-0 z-40 w-full bg-black/30 backdrop-blur-xl supports-[backdrop-filter]:bg-black/20",
+        "fixed top-0 left-0 right-0 z-40 bg-black/30 backdrop-blur-xl supports-[backdrop-filter]:bg-black/20",
         showBorder && "border-b border-white/10"
       )}
     >

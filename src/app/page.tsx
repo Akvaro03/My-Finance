@@ -46,7 +46,7 @@ export default function DashboardPage() {
       {/* Background decoration */}
       <BackgroundDecoration />
 
-      <div className="relative p-6 max-w-7xl mx-auto">
+      <div className="relative p-6 max-w-7xl mx-auto pt-24">
         {/* Balance Card */}
         <Card className="mb-8 bg-gradient-to-r from-blue-600/80 to-sky-500/50 border-0 text-white">
           <CardContent className="p-6">
