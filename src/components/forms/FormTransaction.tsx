@@ -3,7 +3,7 @@ import { Card, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
-import { Info, Loader2, Plus } from "lucide-react";
+import { Info, Loader2, Plus, Trash } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -26,6 +26,8 @@ import {
 import z from "zod";
 import HandleErrorForm from "@/lib/handleErrorForm";
 import { toast } from "sonner";
+import DeleteAccounts from "@/utils/deleteAccounts";
+import DeleteCategory from "@/utils/deleteCategory";
 // 👉 crearías algo similar para categorías
 
 function FormTransaction() {
@@ -113,9 +115,11 @@ function FormTransaction() {
     type: "amount" | "typeId" | "notes" | "accountId" | "categoryId"
   ) => {
     if (categories && type === "categoryId" && value !== "0") {
-      const typeId = categories[Number(value) - 1].type === "income" ? 1 : 2;
-
-      setFormData((prev) => ({ ...prev, typeId: String(typeId) }));
+      const category = categories.find((c) => c.id === Number(value));
+      if (category) {
+        const typeId = category.type === "income" ? 1 : 2;
+        setFormData((prev) => ({ ...prev, typeId: String(typeId) }));
+      }
     }
     setFormData((prev) => ({ ...prev, [type]: value }));
   };
@@ -149,6 +153,7 @@ function FormTransaction() {
                 onValueChange={(value) =>
                   handleFormDataChange(value, "accountId")
                 }
+                disabled={!accounts || accounts.length === 0}
               >
                 <SelectTrigger className="flex-1 bg-slate-800/50 border-slate-600 text-white">
                   <SelectValue
@@ -184,6 +189,21 @@ function FormTransaction() {
               >
                 <Plus className="h-4 w-4" />
               </Button>
+              {formData.accountId && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-red-400 hover:text-red-600 bg-red-500/30 
+           animate-in fade-in slide-in-from-top-2 duration-400"
+                  onClick={async () => {
+                    await DeleteAccounts(Number(formData.accountId));
+                    handleFormDataChange("", "accountId");
+                    refetchAccounts();
+                  }}
+                >
+                  <Trash className="h-4 w-4" />
+                </Button>
+              )}
             </div>
           </div>
           {/* Category Field */}
@@ -239,7 +259,7 @@ function FormTransaction() {
                     ))
                   ) : (
                     <SelectItem value="2" disabled>
-                      No accounts available
+                      No categories available
                     </SelectItem>
                   )}
                 </SelectContent>
@@ -248,11 +268,26 @@ function FormTransaction() {
                 type="button"
                 variant="outline"
                 size="icon"
-                onClick={() => setShowAddCategory(true)}
                 className="border-slate-600 hover:bg-slate-700"
+                onClick={() => setShowAddCategory(true)}
               >
                 <Plus className="h-4 w-4" />
               </Button>
+              {formData.categoryId && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-red-400 hover:text-red-600 bg-red-500/30 
+           animate-in fade-in slide-in-from-top-2 duration-400"
+                  onClick={async () => {
+                    await DeleteCategory(Number(formData.categoryId));
+                    handleFormDataChange("", "categoryId");
+                    refetchCategories();
+                  }}
+                >
+                  <Trash className="h-4 w-4" />
+                </Button>
+              )}
             </div>
           </div>
 

@@ -17,7 +17,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const data = deleteAccount.parse(body);
-    await prisma.accounts.delete({
+    await prisma.categories.delete({
       where: {
         id: data.delete_id,
         user_id: user.id,
